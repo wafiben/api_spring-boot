@@ -1,30 +1,30 @@
 package dev.runnerz;
 
+import dev.runnerz.models.User;
+import dev.runnerz.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class RunnerzApplication {
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(RunnerzApplication.class);
-    private static final LocalDateTime s = LocalDateTime.now();
+    private static final Logger logger = LoggerFactory.getLogger(RunnerzApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(RunnerzApplication.class, args);
-        logger.info("hello from the other side of the world");
-        System.out.println(s);
     }
 
-
-//	@Bean
-//	CommandLinerRunner runner(){
-//		return args ->{
-//			Run run =new Run(1,"first Run",LocalDateTime.now(),LocalDateTime.now().plus(1, ChronoUnit.HOURS),200,Location.INDOR);
-//		}
-
-
-
+    @Bean
+    CommandLineRunner run(UserRepository userRepository) {
+        return args -> {
+            User user = new User("StartupUser", "startup@example.com");
+            userRepository.save(user);
+            logger.info("Saved user at startup: ");
+        };
+    }
 }
